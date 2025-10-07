@@ -31,7 +31,7 @@ export default function HelloPage() {
    * The initial value of `count` is 0 and is set when the page
    * is loaded.
    */
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(2);
 
   /**
    * In a React component function, JSX (HTML + CSS + JS)
@@ -45,7 +45,7 @@ export default function HelloPage() {
          * Can you find where the PageTitle component declaration is?
          */
       }
-      <PageTitle contents="Hello, JumboCode Developers!" />
+      <PageTitle contents="Hello, Will!" />
       {
         /**
          * This is a <div> which allows us to divide a webpage
@@ -70,7 +70,7 @@ export default function HelloPage() {
         }
         <button
           className="p-3 mx-8 rounded border-green-500 bg-green-500 hover:bg-green-600 text-white"
-          onClick={() => setCount(currentCount => currentCount + 2)}
+          onClick={() => setCount(currentCount => Math.pow(currentCount, 2))}
         >
           Current Count: {count}
         </button>
@@ -84,7 +84,7 @@ export default function HelloPage() {
         }
         <button
           className="p-2 mx-8 rounded border bg-gray-100 hover:bg-gray-200"
-          onClick={() => setCount(100)}
+          onClick={() => setCount(2)}
         >
           Reset Count
         </button>

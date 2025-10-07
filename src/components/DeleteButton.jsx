@@ -7,6 +7,11 @@
  * need to modify this file to delete cards!
  */
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
+
+
 export default function DeleteButton({ onDelete }) {
 
   // Function to handle delete button click
@@ -22,7 +27,7 @@ export default function DeleteButton({ onDelete }) {
       onClick={handleDelete}
       className="absolute top-2 right-2 w-6 h-6 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white text-sm font-bold transition-colors"
     >
-      X
+    <FontAwesomeIcon icon={faTrash} />
     </button>
   );
 }
