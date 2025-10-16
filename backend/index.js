@@ -11,6 +11,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
+const path = require("path");
 
 // Initializes "routing" with express.js
 const app = express();
@@ -60,7 +61,7 @@ app.get('/sum', (req, res) => {
   }
 
   // Return the sum here instead of the query validation message
-  return res.send("Query Params are Valid");
+  return res.json({ sum: Number(value1) + Number(value2) });
 });
 
 // This endpoint should only be accessible via POST request
@@ -78,6 +79,9 @@ app.get('/save-cards', (_, res) => {
  * 
  * @todo Add file saving logic!
  */
+const dataFile = path.resolve(__dirname, 'flashcards.txt');
+
+
 app.post('/save-cards', (req, res) => {
   const body = req.body;
 
@@ -94,6 +98,17 @@ app.post('/save-cards', (req, res) => {
     // Hint: check out this tutorial
     // https://www.w3schools.com/nodejs/nodejs_filesystem.asp
     // No need to `require` fs, I've already imported it for you
+    // Or with destructuring
+
+    // Write the file using the resolved dataFile path and utf-8 encoding
+    fs.writeFile(dataFile, cardString, { encoding: 'utf8' }, (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("Internal Server Error");
+      }
+      console.log(`Flashcards saved to ${dataFile}`);
+    });
+
 
     return res.status(201).send("OK")
   }
@@ -112,10 +127,17 @@ app.get("/get-cards", (req, res) => {
 
   try { // It's always good practice to wrap file I/O in try/catch so a user gets some feedback!
     // Load the flashcards from a file in the backend folder! This will look similar to the save logic
+    // If the file doesn't exist yet, return an empty list instead of throwing
+    if (!fs.existsSync(dataFile)) {
+      return res.status(200).json({ flashcards: [] });
+    }
 
-    // Deserialize the flashcards string into an array of objects. Hint: JSON.parse is your friend
+    const cardString = fs.readFileSync(dataFile, 'utf8');
+    // Deserialize the flashcards string into an array of objects. JSON.parse returns
+    // the original array we saved in /save-cards, so return it directly.
+    const flashcards = JSON.parse(cardString);
 
-    return res.status(200).json({ flashcards: [] }); // TODO: Replace this with the loaded flashcards
+    return res.status(200).json({ flashcards });
   }
   catch(error) {
     console.error(error);
